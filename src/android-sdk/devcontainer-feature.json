@@ -1,0 +1,9 @@
+{
+  "name": "android-sdk",
+  "id": "android-sdk",
+  "version": "1.0.0",
+  "description": "Setup android sdk in your development container",
+  "documentationURL": "https://github.com/pnstack/codespace",
+  "licenseURL": "https://github.com/pnstack/codespace/blob/main/LICENSE",
+  "options": {}
+}
