@@ -25,4 +25,4 @@ jobs:
         with:
           subFolder: ./templates/react-native
           imageName: ghcr.io/pnstack/codespace
-          runCmd: make ci-build
+          push: always
