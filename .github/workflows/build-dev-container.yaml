@@ -12,38 +12,37 @@ jobs:
     outputs:
       dir: ${{ steps.list-dir.outputs.dir }} 
     steps:
-      - id: "list-dir"
-        shell: python
-        run: |
-          import os
-          import json
-
-          dir = "templates"
-          dirs = [name for name in os.listdir(dir) if os.path.isdir(os.path.join(dir, name))]
-          print(f"::set-output name=dir::{json.dumps(dirs)}")
+      - name: Checkout
+        uses: actions/checkout@v4  
+           
+      - name: List Dir
+        id: list-dir
+        uses: pnstack/actions/list-dir@main
+        with: 
+          dir: templates
       - name: log
         run: echo ${{ steps.list-dir.outputs.dir }}
   
-  # build:
-  #   runs-on: ubuntu-latest
-  #   needs: [list-dir] 
-  #   strategy:
-  #     matrix:
-  #       dir: ${{fromJson(needs.list-dir.outputs.dir)}} 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4      
+  build:
+    runs-on: ubuntu-latest
+    needs: [list-dir] 
+    strategy:
+      matrix:
+        dir: ${{fromJson(needs.list-dir.outputs.dir)}} 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4      
 
-  #     - name: Login to GitHub Container Registry
-  #       uses: docker/login-action@v2 
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.repository_owner }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2 
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Build and run Dev Container task
-  #       uses: devcontainers/ci@v0.3
-  #       with:
-  #         subFolder: ./templates/${{ matrix.dir }}
-  #         imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}
-  #         push: always
+      - name: Build and run Dev Container task
+        uses: devcontainers/ci@v0.3
+        with:
+          subFolder: ./templates/${{ matrix.dir }}
+          imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}
+          push: always
