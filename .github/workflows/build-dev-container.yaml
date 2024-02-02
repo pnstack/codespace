@@ -9,7 +9,7 @@ jobs:
 
   find-jobs:
     name: Find Jobs
-    container: debian:buster-slim
+    runs-on: ubuntu-latest
     outputs:
       folders: ${{ steps.jobs.outputs.folders }}
     steps:
@@ -22,8 +22,8 @@ jobs:
 
   matrix:
     name: Matrix Jobs
+    runs-on: ubuntu-latest
     needs: [find-jobs]
-    container: ubuntu
     defaults:
       run:
         working-directory: ${{ matrix.folder }}
