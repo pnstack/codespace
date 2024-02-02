@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: set-dirs 
-        run: echo "name=dir::$(ls -d templates/*/ | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        run: echo "::set-output name=dir::$(ls -d templates/*/ | jq -R -s -c 'split("\n")[:-1]')"
   
   loop:
     runs-on: ubuntu-latest
@@ -22,5 +22,5 @@ jobs:
       matrix:
         dir: ${{fromJson(needs.directories.outputs.dir)}} 
     steps:
-      - run: echo ${{matrix.dir}}
+      - run: echo ${{needs.directories.outputs.dir}}
 
