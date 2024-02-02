@@ -43,7 +43,7 @@ jobs:
       - name: Build and run Dev Container task
         uses: devcontainers/ci@v0.3
         with:
-          subFolder: ./templates/${{ matrix.dir }}
+          subFolder: ${{ matrix.dir }}
           imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}
           platform: linux/amd64,linux/arm64
           push: always
