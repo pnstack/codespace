@@ -45,6 +45,6 @@ jobs:
         with:
           subFolder: ${{ matrix.dir }}
           imageName: ghcr.io/pnstack/codespace
-          imageTag: ${{ matrix.dir }}
+          # imageTag: ${{ matrix.dir }}
           platform: linux/amd64,linux/arm64
           push: always
