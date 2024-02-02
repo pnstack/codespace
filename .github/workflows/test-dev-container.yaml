@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: set-dirs 
-        run: echo "::set-output name=dir::$(ls -d */ | jq -R -s -c 'split("\n")[:-1]')"
+        run: echo "::set-output name=dir::$(ls -d templates/*/ | jq -R -s -c 'split("\n")[:-1]')"
   
   loop:
     runs-on: ubuntu-latest
