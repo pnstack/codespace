@@ -16,6 +16,8 @@ jobs:
       - name: List Dir
         id: list-dir
         uses: pnstack/actions/list-dir@main
+        with: 
+          dir: "templates/*/"
   
   loop:
     runs-on: ubuntu-latest
