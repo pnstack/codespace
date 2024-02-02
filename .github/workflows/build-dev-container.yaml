@@ -12,11 +12,15 @@ jobs:
     outputs:
       dir: ${{ steps.list-dir.outputs.dir }} 
     steps:
-      - name: List Dir
-        id: list-dir
-        uses: pnstack/actions/list-dir@main
-        # with: 
-        #   dir: templates
+      - id: "list-dir"
+        shell: python
+        run: |
+          import os
+          import json
+
+          dir = "templates"
+          dirs = [name for name in os.listdir(dir) if os.path.isdir(os.path.join(dir, name))]
+          print(f"::set-output name=dir::{json.dumps(dirs)}")
       - name: log
         run: echo ${{ steps.list-dir.outputs.dir }}
   
