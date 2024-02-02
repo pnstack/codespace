@@ -1,5 +1,6 @@
 name: 'Build dev container' 
-on: # rebuild any PRs and main branch changes
+
+on: 
   pull_request:
   push:
     branches:
@@ -7,59 +8,42 @@ on: # rebuild any PRs and main branch changes
 
 jobs:
 
-  find-jobs:
-    name: Find Jobs
+  directories:
     runs-on: ubuntu-latest
     outputs:
-      folders: ${{ steps.jobs.outputs.folders }}
+      dir: ${{ steps.set-dirs.outputs.dir }} 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+      - id: set-dirs 
+        run: echo "::set-output name=dir::$(ls -d templates/*/ | jq -R -s -c 'split("\n")[:-1]')"
 
-      - id: jobs
-        uses: philips-labs/list-folders-action@v1
-        with:
-          path: ./templates
-
-  matrix:
-    name: Matrix Jobs
+  build:
     runs-on: ubuntu-latest
-    needs: [find-jobs]
-    defaults:
-      run:
-        working-directory: ${{ matrix.folder }}
+    needs: [directories] 
     strategy:
       matrix:
-        folder: ${{ fromJson(needs.find-jobs.outputs.folders )}}
+        dir: ${{fromJson(needs.directories.outputs.dir)}} 
     steps:
-      - name: do something
-        run: echo ${{ matrix.folder }}
-
-  # build:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       subfolder: ${{ fromJSON(needs.list-folders.outputs.folders) }}
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
       
-  #     - name: Set up QEMU
-  #       uses: docker/setup-qemu-action@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
       
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226
 
-  #     - name: Login to GitHub Container Registry
-  #       uses: docker/login-action@v2 
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.repository_owner }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2 
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Build and run Dev Container task
-  #       uses: devcontainers/ci@v0.3
-  #       with:
-  #         subFolder: ./templates/${{ matrix.subfolder }}
-  #         imageName: ghcr.io/pnstack/codespace/${{ matrix.subfolder }}
-  #         platform: linux/amd64,linux/arm64
-  #         push: always
+      - name: Build and run Dev Container task
+        uses: devcontainers/ci@v0.3
+        with:
+          subFolder: ./templates/${{ matrix.dir }}
+          imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}
+          platform: linux/amd64,linux/arm64
+          push: always
