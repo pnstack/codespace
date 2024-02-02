@@ -1,0 +1,35 @@
+name: 'Test dev container' 
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    branches:
+      - develop
+
+jobs:
+  find-jobs:
+    name: Find Jobs
+    runs-on: ubuntu-latest
+    outputs:
+      folders: ${{ steps.jobs.outputs.folders }}
+    steps:
+      - uses: actions/checkout@v1
+
+      - id: jobs
+        uses: philips-labs/list-folders-action@v1
+        with:
+          path: ./templates
+
+  matrix:
+    name: Matrix Jobs
+    runs-on: ubuntu-latest
+    needs: [find-jobs]
+    defaults:
+      run:
+        working-directory: ${{ matrix.folder }}
+    strategy:
+      matrix:
+        folder: ${{ fromJson(needs.find-jobs.outputs.folders )}}
+    steps:
+      - name: do something
+        run: echo ${{ matrix.folder }}
+
