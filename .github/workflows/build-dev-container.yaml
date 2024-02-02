@@ -6,10 +6,28 @@ on: # rebuild any PRs and main branch changes
       - master
 
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v3
+
+      - name: Set matrix for build
+        id: set-matrix
+        run: |
+          FOLDERS=$(ls -d templates/*/)
+          FOLDERS=${FOLDERS//\//} # remove trailing slashes
+          FOLDERS=${FOLDERS//templates\//} # remove leading 'templates/'
+          FOLDERS_JSON=$(echo "$FOLDERS" | jq -R -s -c 'split("\n")[:-1]')
+          echo "::set-output name=matrix::${FOLDERS_JSON}"
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        subfolder: ${{fromJson(needs.prepare.outputs.matrix)}}
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
       
@@ -29,7 +47,7 @@ jobs:
       - name: Build and run Dev Container task
         uses: devcontainers/ci@v0.3
         with:
-          subFolder: ./templates/react-native
-          imageName: ghcr.io/pnstack/codespace/react-native
+          subFolder: ./templates/${{ matrix.subfolder }}
+          imageName: ghcr.io/pnstack/codespace/${{ matrix.subfolder }}
           platform: linux/amd64,linux/arm64
           push: always
