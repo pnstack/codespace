@@ -18,12 +18,12 @@ jobs:
         id: set-matrix
         run: |
           FOLDERS=$(ls -d templates/*/)
-          FOLDERS=${FOLDERS//\//} # remove trailing slashes
+          FOLDERS=${FOLDERS%/} # remove trailing slashes
           FOLDERS=${FOLDERS//templates\//} # remove leading 'templates/'
           FOLDERS_JSON=$(echo "$FOLDERS" | jq -R -s -c 'split("\n")[:-1]')
           echo "FOLDERS_JSON: $FOLDERS_JSON"
           echo "::set-output name=matrix::${FOLDERS_JSON}"
-          
+
   build:
     runs-on: ubuntu-latest
     strategy:
