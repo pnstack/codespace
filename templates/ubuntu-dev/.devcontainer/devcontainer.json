@@ -43,7 +43,8 @@
     },
     "ghcr.io/devcontainers/features/go:1": {
       "version": "latest"
-    }
+    },
+    "./local-features/ubuntu-dev": "latest"
   },
   "runArgs": ["--device=/dev/net/tun"]
 
