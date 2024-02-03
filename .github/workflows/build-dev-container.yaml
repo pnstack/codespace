@@ -28,6 +28,7 @@ jobs:
     needs: [list-dir] 
     strategy:
       matrix:
+        fail-fast: false
         dir: ${{fromJson(needs.list-dir.outputs.dir)}} 
     steps:
       - name: Checkout
