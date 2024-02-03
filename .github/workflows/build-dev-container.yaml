@@ -44,6 +44,7 @@ jobs:
         uses: devcontainers/ci@v0.3
         with:
           subFolder: ./templates/${{ matrix.dir }}
-          imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}          
+          imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}   
+          cacheFrom: ghcr.io/pnstack/codespace/${{ matrix.dir }}:latest       
           imageTag: ${{ github.ref == 'refs/heads/master' && 'latest' || github.ref_name }}
           push: always
