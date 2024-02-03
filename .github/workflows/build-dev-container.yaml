@@ -32,7 +32,13 @@ jobs:
         dir: ${{fromJson(needs.list-dir.outputs.dir)}} 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4      
+        uses: actions/checkout@v4  
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2 
