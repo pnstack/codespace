@@ -41,7 +41,8 @@
     },
     "ghcr.io/devcontainers/features/go:1": {
       "version": "latest"
-    }
+    },
+    "ghcr.io/devcontainers-contrib/features/neovim-apt-get:1": {}
   },
   "runArgs": ["--device=/dev/net/tun"],
   "customizations": {
