@@ -1,0 +1,10 @@
+{
+  "name": "ubuntu-dev",
+  "id": "ubuntu-dev",
+  "version": "1.0.3",
+  "description": "Setup android sdk in your development container",
+  "documentationURL": "https://github.com/pnstack/codespace",
+  "licenseURL": "https://github.com/pnstack/codespace/blob/main/LICENSE",
+  "options": {},
+  "installsAfter": ["ghcr.io/devcontainers/features/python"]
+}
