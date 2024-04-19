@@ -53,7 +53,7 @@
     "vscode": {
       "extensions": ["npv2k1.theme-dracula-gray", "ms-azuretools.vscode-docker"]
     }
-  }
+  },
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   // "features": {},
@@ -68,5 +68,5 @@
   // "customizations": {},
 
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-  // "remoteUser": "root"
+  "remoteUser": "openvscode-server"
 }
