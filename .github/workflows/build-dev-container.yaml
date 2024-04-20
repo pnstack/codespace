@@ -6,6 +6,10 @@ on:
       - master
       - develop
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -63,9 +67,9 @@ jobs:
         uses: devcontainers/ci@v0.3
         with:
           subFolder: ./templates/${{ matrix.dir }}
-          imageName: npv2k1/codespace/${{ matrix.dir }}
-          cacheFrom: npv2k1/codespace/${{ matrix.dir }}:latest
-          imageTag: ${{ github.ref == 'refs/heads/master' && 'latest' || github.ref_name }}
+          imageName: npv2k1/codespace
+          cacheFrom: npv2k1/codespace:${{ matrix.dir }}-${{ github.ref == 'refs/heads/master' && 'latest' || github.ref_name }}
+          imageTag: ${{ matrix.dir }}-${{ github.ref == 'refs/heads/master' && 'latest' || github.ref_name }}
           platform: linux/amd64,linux/arm64
           push: always
 
