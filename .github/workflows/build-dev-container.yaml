@@ -50,6 +50,7 @@ jobs:
       - name: Build and run Dev Container task
         uses: devcontainers/ci@v0.3
         with:
+          provenance: false
           subFolder: ./templates/${{ matrix.dir }}
           imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}
           cacheFrom: ghcr.io/pnstack/codespace/${{ matrix.dir }}:latest
