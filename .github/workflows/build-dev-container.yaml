@@ -6,6 +6,10 @@ on:
       - master
       - develop
 
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+
 jobs:
   list-dir:
     runs-on: ubuntu-latest
@@ -39,21 +43,38 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          use: true
+
+      # - name: Login to GitHub Container Registry
+      #   uses: docker/login-action@v2
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.repository_owner }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to Docker registry
+        uses: docker/login-action@v3.0.0
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
 
       - name: Build and run Dev Container task
         uses: devcontainers/ci@v0.3
         with:
-          provenance: false
           subFolder: ./templates/${{ matrix.dir }}
-          imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}
-          cacheFrom: ghcr.io/pnstack/codespace/${{ matrix.dir }}:latest
+          imageName: npv2k1/codespace/${{ matrix.dir }}
+          cacheFrom: npv2k1/codespace/${{ matrix.dir }}:latest
           imageTag: ${{ github.ref == 'refs/heads/master' && 'latest' || github.ref_name }}
           platform: linux/amd64,linux/arm64
           push: always
+
+      # - name: Build and run Dev Container task
+      #   uses: devcontainers/ci@v0.3
+      #   with:
+      #     subFolder: ./templates/${{ matrix.dir }}
+      #     imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}
+      #     cacheFrom: ghcr.io/pnstack/codespace/${{ matrix.dir }}:latest
+      #     imageTag: ${{ github.ref == 'refs/heads/master' && 'latest' || github.ref_name }}
+      #     platform: linux/amd64,linux/arm64
+      #     # push: always
