@@ -70,5 +70,5 @@ jobs:
           imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}
           cacheFrom: ghcr.io/pnstack/codespace/${{ matrix.dir }}:latest
           imageTag: ${{ github.ref == 'refs/heads/main' && 'latest' || steps.meta.outputs.tags }}
-          platform: linux/amd64,linux/arm64
+          platform: linux/amd64
           push: always
