@@ -2,14 +2,14 @@ name: "Update Documentation"
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     environment: documentation
-    if: "github.ref == 'refs/heads/master'"
+    if: "github.ref == 'refs/heads/main'"
     steps:
       - uses: actions/checkout@v3
 

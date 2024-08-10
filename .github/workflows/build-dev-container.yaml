@@ -3,7 +3,7 @@ name: "Build dev container"
 on:
   push:
     branches:
-      - master
+      - main
       - develop
 
 concurrency:
@@ -11,8 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   list-dir:
@@ -50,35 +50,25 @@ jobs:
         with:
           use: true
 
-      # - name: Login to GitHub Container Registry
-      #   uses: docker/login-action@v2
-      #   with:
-      #     registry: ghcr.io
-      #     username: ${{ github.repository_owner }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Login to Docker registry
+      - name: Log in to the Container registry
         uses: docker/login-action@v3.0.0
         with:
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and run Dev Container task
         uses: devcontainers/ci@v0.3
         with:
           subFolder: ./templates/${{ matrix.dir }}
-          imageName: npv2k1/codespace
-          cacheFrom: npv2k1/codespace:${{ matrix.dir }}-${{ github.ref == 'refs/heads/master' && 'latest' || github.ref_name }}
-          imageTag: ${{ matrix.dir }}-${{ github.ref == 'refs/heads/master' && 'latest' || github.ref_name }}
-          platform: linux/amd64,linux/arm64
+          imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}
+          cacheFrom: ghcr.io/pnstack/codespace/${{ matrix.dir }}:latest
+          imageTag: ${{ github.ref == 'refs/heads/main' && 'latest' || steps.meta.outputs.tags }}
+          platform: linux/amd64 #,linux/arm64
           push: always
-
-      # - name: Build and run Dev Container task
-      #   uses: devcontainers/ci@v0.3
-      #   with:
-      #     subFolder: ./templates/${{ matrix.dir }}
-      #     imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}
-      #     cacheFrom: ghcr.io/pnstack/codespace/${{ matrix.dir }}:latest
-      #     imageTag: ${{ github.ref == 'refs/heads/master' && 'latest' || github.ref_name }}
-      #     platform: linux/amd64,linux/arm64
-      #     # push: always
