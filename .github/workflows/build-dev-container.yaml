@@ -67,7 +67,7 @@ jobs:
       - name: Build and run Dev Container task
         uses: devcontainers/ci@v0.3
         with:
-          subFolder: ./templates/${{ matrix.dir }}
+          subFolder: ./templates${{ matrix.platform == 'linux/arm64' && '-arm' || '' }}/${{ matrix.dir }}
           imageName: ghcr.io/pnstack/codespace/${{ matrix.dir }}${{ matrix.platform == 'linux/arm64' && '-arm' || '' }}
           cacheFrom: ghcr.io/pnstack/codespace/${{ matrix.dir }}:latest
           imageTag: ${{ github.ref == 'refs/heads/main' && 'latest' || steps.meta.outputs.tags }}
