@@ -97,7 +97,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        dir: ${{fromJson(needs.list-dir.outputs.dir)}}
+        dir: ${{fromJson(needs.list-dir-arm.outputs.dir)}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
