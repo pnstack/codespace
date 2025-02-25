@@ -38,7 +38,7 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{fromJson(needs.list-dir.outputs.dir)}}
-        platform: ["linux/amd64", "linux/arm64"]
+        platform: ["linux/amd64"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
