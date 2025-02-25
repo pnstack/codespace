@@ -1,4 +1,4 @@
-name: "Build dev container"
+name: "Build arm container"
 
 on:
   push:
