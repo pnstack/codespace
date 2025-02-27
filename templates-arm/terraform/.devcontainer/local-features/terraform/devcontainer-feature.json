@@ -1,0 +1,8 @@
+{
+  "id": "terraform",
+  "name": "Terraform",
+  "install": {
+    "app": "",
+    "file": "install.sh"
+  }
+}
