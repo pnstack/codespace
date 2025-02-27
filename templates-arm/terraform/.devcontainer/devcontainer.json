@@ -9,12 +9,13 @@
   },
   "features": {
     "./local-features/aws-cli": "latest",
-    "./local-features/terraform": "latest"
+    "./local-features/terraform": "latest",
+    // "./local-features/google-cloud-cli": "latest"
     // "ghcr.io/devcontainers/features/common-utils": {},
     // "ghcr.io/devcontainers/features/terraform:1": {},
     // "ghcr.io/devcontainers/features/aws-cli:1": {},
-    // "ghcr.io/devcontainers/features/azure-cli:1": {},
-    // "ghcr.io/dhoeric/features/google-cloud-cli:1": {}
+    "ghcr.io/devcontainers/features/azure-cli:1": {},
+    "ghcr.io/dhoeric/features/google-cloud-cli:1": {}
     // "./local-features/ubuntu-dev": "latest"
   },
   "runArgs": ["--device=/dev/net/tun"]
