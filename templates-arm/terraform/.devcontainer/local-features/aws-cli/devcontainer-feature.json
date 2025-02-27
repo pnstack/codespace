@@ -1,0 +1,8 @@
+{
+  "id": "aws-cli",
+  "name": "AWS CLI",
+  "install": {
+    "app": "",
+    "file": "install.sh"
+  }
+}
